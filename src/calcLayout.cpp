@@ -43,7 +43,7 @@ int strToInt(string &str){
 
 void loadData(){
 
-    ifstream ifs("../data/jazzDisMat.txt");
+    ifstream ifs("data/jazzDisMat.txt");
     istringstream ist;
     string str;
     if(ifs.fail()){
@@ -318,24 +318,26 @@ int reprojection(int id, float pre_x, float pre_y, float pre_z, float new_x, flo
         errors4 += er5*er5;
         errors4 += er6*er6;
 
+        float change = inner_prod(e1,e1_new) + inner_prod(e2,e2_new) + inner_prod(e3,e3_new);
+        if(change < 2.8) return 0;
+
         //cout << errors1 << endl;
         //cout << errors2 << endl;
         //cout << errors3 << endl;
         //cout << errors4 << endl;
-        //cout << sqrt(errors1+errors2+errors3+errors4) << endl;
+        cout << sqrt(errors1+errors2+errors3+errors4) << endl;
 
         //        e1_new = e1_new / norm_2(e1_new);
         //        e2_new = e2_new / norm_2(e2_new);
         //        e3_new = e3_new / norm_2(e3_new);
 
         //Gram-Schmidt orthonormalization
-
         e1_new = e1_new / norm_2(e1_new);
         e2_new = e2_new - inner_prod(e1_new,e2_new)*e1_new; 
         e2_new = e2_new / norm_2(e2_new);
         e3_new = e3_new - inner_prod(e1_new,e3_new)*e1_new - inner_prod(e2_new,e3_new)*e2_new;;
         e3_new = e3_new / norm_2(e3_new);
-
+        
         //cout << norm_2(e1_new) << " " << norm_2(e2_new) << " " << norm_2(e3_new) << endl;
         /*
            cout << "== debug ==" << endl;
