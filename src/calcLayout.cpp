@@ -216,7 +216,7 @@ int reprojection(int id, float pre_x, float pre_y, float pre_z, float new_x, flo
         pre_norm += _pre[i]*_pre[i];
     }
 
-    if(new_norm < p_norm*0.85f && pre_norm < p_norm*0.85f){
+    if(new_norm < p_norm*0.95f && pre_norm < p_norm*0.95f){
         //cout << "pre:" << pre_x << " " << pre_y << " " << pre_z << endl;
         //cout << "new:" << new_x << " " << new_y << " " << new_z << endl;        
         /*
@@ -325,7 +325,7 @@ int reprojection(int id, float pre_x, float pre_y, float pre_z, float new_x, flo
         //cout << errors2 << endl;
         //cout << errors3 << endl;
         //cout << errors4 << endl;
-        cout << sqrt(errors1+errors2+errors3+errors4) << endl;
+        //cout << sqrt(errors1+errors2+errors3+errors4) << endl;
 
         //        e1_new = e1_new / norm_2(e1_new);
         //        e2_new = e2_new / norm_2(e2_new);

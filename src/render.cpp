@@ -30,7 +30,7 @@ static vector3 blue(0.0f, 0.0f, 1.0f);
 static vector3 red(1.0f,0.0f,0.0f);
 
 //window
-static int width = 800; static int height = 600;
+static int width = 900; static int height = 900;
 
 //camera
 static float v = 5.0f;
@@ -106,14 +106,18 @@ void Lighting(){
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_LIGHTING);
-    GLfloat light0_ambient[] = {0.2f,0.2f,0.2f,1.0f};
-    GLfloat light0_diffuse[] = {0.65f,0.65f,0.65f,1.0f};
-    //    GLfloat light0_position[] = {0.0f,0.0f,1.0f,1.0f};
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  light0_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light0_diffuse);
+    GLfloat light_ambient[] = {0.2f,0.2f,0.2f,1.0f};
+    GLfloat light_diffuse[] = {0.65f,0.65f,0.65f,1.0f};
+    GLfloat light_position[] = {0.0f,0.0f,-v,1.0f};
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos.data());
+    glLightfv(GL_LIGHT1, GL_AMBIENT,  light_ambient);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE,  light_diffuse);
+    glLightfv(GL_LIGHT1, GL_POSITION, light_position);
     //	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
     glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
 }
 
 void RenderScene(){
@@ -204,16 +208,22 @@ void ProcessSelection(int xPos, int yPos){
 
     glRenderMode(GL_SELECT);
     glLoadIdentity();
-    gluPickMatrix(xPos, viewport[3] - yPos + viewport[1], 2,2, viewport);
+    gluPickMatrix(xPos, viewport[3] - yPos + viewport[1], 1,1, viewport);
     fAspect = (float)viewport[2] / (float)viewport[3];
     gluPerspective(angle, fAspect, near, far);
     RenderScene();
     hits = glRenderMode(GL_RENDER);
-    GLuint nErr = glGetError();
     
-    if(hits == 1 && !isPicked){
+    if(hits >= 1 && !isPicked){
         //cout << "PICK" << endl;
-        id = selectBuff[3];
+        for(int i = 3; i < BUFFER_LENGTH; i+= 3){
+            int tmp = selectBuff[i];
+            cout << tmp << endl;
+            if(tmp >= 0 && tmp < N){
+                id = tmp;
+                break;
+            }
+        }
         cout << id << endl;
         pre_x = pos_x[id];
         pre_y = pos_y[id];
@@ -337,7 +347,7 @@ void SetupRC(){
     glCullFace(GL_FRONT);
     //Lighting();
     //glEnable(GL_LINE_SMOOTH);
-    glLineWidth(0.1f);
+    glLineWidth(0.01f);
     //Back Ground
     glClearColor(0.9f, 0.9f, 0.9f, 1.0f );
     //Buffer
