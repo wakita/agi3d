@@ -33,13 +33,12 @@ static vector3 red(1.0f,0.0f,0.0f);
 static int width = 800; static int height = 800;
 
 //camera
-static float v = 5.0f;
+static float v = 6.0f;
 static vector3 eye(0,0,v);
 static vector3 target(0,0,0);
 static vector3 up(0,1,0);
 static float phi = 0, theta = 0;
 static float radius = 0.05f;
-float rate = 1.0f;
 
 //light
 static vector4 lightPos(eye[0],eye[1],eye[2],1.0f);
@@ -304,8 +303,7 @@ void MouseMotionCallback(int x, int y){
         
         mouse_pos_x = x; mouse_pos_y = y;
         
-        int a = reprojection(id, pre_x, pre_y, pre_z, 
-                new_x, new_y, new_z);
+        int a = reprojection(id, pre_x, pre_y, pre_z, new_x, new_y, new_z);
         
         if(a == 1){
             relayout();
@@ -341,6 +339,9 @@ void SetupRC(){
     //camera setting
     eye.set(0,0,v); target.zero(); up.set(0.0f,1.0f,0.0f);
     glEnable(GL_DEPTH_TEST);
+    
+    glEnable(GL_NORMALIZE);
+
     //culling
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
@@ -388,7 +389,7 @@ int main(int argc, char* argv[]){
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(width,height);
     
-    glutCreateWindow("display");
+    glutCreateWindow("window");
     glutReshapeFunc(ChangeSize);
     glutMouseFunc(MouseCallback);
     glutMotionFunc(MouseMotionCallback);

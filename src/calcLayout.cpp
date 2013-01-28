@@ -199,7 +199,9 @@ void calcInitLayout(){
     init[12] = -0.1; init[13] = 0.1; init[14] = 0.1;
 }
 
-int reprojection(int id, float pre_x, float pre_y, float pre_z, float new_x, float new_y, float new_z){
+int reprojection(int id, 
+        float pre_x, float pre_y, float pre_z, 
+        float new_x, float new_y, float new_z){
     float _pre[3]; float _new[3];
     _pre[0] = pre_x; _pre[1] = pre_y; _pre[2] = pre_z;
     _new[0] = new_x; _new[1] = new_y; _new[2] = new_z;
