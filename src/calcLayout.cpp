@@ -43,7 +43,7 @@ int strToInt(string &str){
 
 void loadData(){
 
-    ifstream ifs("data/jazzDisMat.txt");
+    ifstream ifs("data/ug380DisMat.txt");
     istringstream ist;
     string str;
     if(ifs.fail()){

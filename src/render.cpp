@@ -30,10 +30,10 @@ static vector3 blue(0.0f, 0.0f, 1.0f);
 static vector3 red(1.0f,0.0f,0.0f);
 
 //window
-static int width = 900; static int height = 900;
+static int width = 800; static int height = 800;
 
 //camera
-static float v = 5.0f;
+static float v = 6.0f;
 static vector3 eye(0,0,v);
 static vector3 target(0,0,0);
 static vector3 up(0,1,0);
