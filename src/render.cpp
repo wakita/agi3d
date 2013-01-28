@@ -21,7 +21,7 @@ extern int M;
 //Graph Layouts
 extern fmatrix C;
 extern vector< pair<int, int> >  edges;
-void loadData();
+void loadData(char *);
 void calcInitLayout();
 
 static float * pos_x, * pos_y, * pos_z;
@@ -33,7 +33,7 @@ static vector3 red(1.0f,0.0f,0.0f);
 static int width = 800; static int height = 800;
 
 //camera
-static float v = 6.0f;
+static float v = 5.0f;
 static vector3 eye(0,0,v);
 static vector3 target(0,0,0);
 static vector3 up(0,1,0);
@@ -372,7 +372,7 @@ void ChangeSize(int w, int h){
 }
 
 int main(int argc, char* argv[]){
-    loadData();
+    loadData(argv[1]);
     pos_x = new float[N];
     pos_y = new float[N];
     pos_z = new float[N];

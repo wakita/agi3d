@@ -41,9 +41,10 @@ int strToInt(string &str){
     return t;
 }
 
-void loadData(){
+void loadData(char * data){
 
-    ifstream ifs("data/ug380DisMat.txt");
+    ifstream ifs(data);
+    //ifstream ifs("data/jazzDisMat.txt");
     istringstream ist;
     string str;
     if(ifs.fail()){
