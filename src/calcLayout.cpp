@@ -220,8 +220,7 @@ int reprojection(int id,
     }
 
     if(new_norm < p_norm*0.95f && pre_norm < p_norm*0.95f){
-        //cout << "pre:" << pre_x << " " << pre_y << " " << pre_z << endl;
-        //cout << "new:" << new_x << " " << new_y << " " << new_z << endl;        
+    
         /*
            float t = 0.001;
 
@@ -271,10 +270,10 @@ int reprojection(int id,
 
         //init
         /*
-        for(int i = 0; i < 15; i++){
-            init[i] = res[i];
-        }
-        */
+           for(int i = 0; i < 15; i++){
+           init[i] = res[i];
+           }
+           */
 
         r1 = res[9]*e1 + res[10]*e2 + res[11]*e3;
         r2 = res[12]*e1 + res[13]*e2 + res[14]*e3;
@@ -295,34 +294,32 @@ int reprojection(int id,
               e1_e3 = inner_prod(e1_new,e3_new),
               r1_r2 = inner_prod(r1,r2);
 
-        //cout << "== ERRORS ==" << endl;
-        float errors1 = 0.0f;
-        errors1 += (x - _new[0])*(x - _new[0]);
-        errors1 += (y - _new[1])*(y - _new[1]);
-        errors1 += (z - _new[2])*(z - _new[2]);
+        /*
+           float errors1 = 0.0f;
+           errors1 += (x - _new[0])*(x - _new[0]);
+           errors1 += (y - _new[1])*(y - _new[1]);
+           errors1 += (z - _new[2])*(z - _new[2]);
 
-        float errors2 = 0.0f;
-        errors2 += (n_1 - 1)*(n_1 - 1);
-        errors2 += (n_2 - 1)*(n_2 - 1);
-        errors2 += (n_3 - 1)*(n_3 - 1);
-        errors2 += (n_r2 - 1 )*(n_r2 - 1);
+           float errors2 = 0.0f;
+           errors2 += (n_1 - 1)*(n_1 - 1);
+           errors2 += (n_2 - 1)*(n_2 - 1);
+           errors2 += (n_3 - 1)*(n_3 - 1);
+           errors2 += (n_r2 - 1 )*(n_r2 - 1);
 
-        float errors3 = 0.0f;
-        errors3 += (e1_e2)*(e1_e2);
-        errors3 += (e2_e3)*(e2_e3);
-        errors3 += (e1_e3)*(e1_e3);
-        errors3 += (r1_r2)*(r1_r2);
+           float errors3 = 0.0f;
+           errors3 += (e1_e2)*(e1_e2);
+           errors3 += (e2_e3)*(e2_e3);
+           errors3 += (e1_e3)*(e1_e3);
+           errors3 += (r1_r2)*(r1_r2);
 
-        float errors4 = 0.0f;
-        errors4 += er1*er1;
-        errors4 += er2*er2;
-        errors4 += er3*er3;
-        errors4 += er4*er4;
-        errors4 += er5*er5;
-        errors4 += er6*er6;
-
-        float change = inner_prod(e1,e1_new) + inner_prod(e2,e2_new) + inner_prod(e3,e3_new);
-        if(change < 2.8) return 0;
+           float errors4 = 0.0f;
+           errors4 += er1*er1;
+           errors4 += er2*er2;
+           errors4 += er3*er3;
+           errors4 += er4*er4;
+           errors4 += er5*er5;
+           errors4 += er6*er6;
+           */
 
         //cout << errors1 << endl;
         //cout << errors2 << endl;
@@ -330,18 +327,7 @@ int reprojection(int id,
         //cout << errors4 << endl;
         //cout << sqrt(errors1+errors2+errors3+errors4) << endl;
 
-        //        e1_new = e1_new / norm_2(e1_new);
-        //        e2_new = e2_new / norm_2(e2_new);
-        //        e3_new = e3_new / norm_2(e3_new);
 
-        //Gram-Schmidt orthonormalization
-        e1_new = e1_new / norm_2(e1_new);
-        e2_new = e2_new - inner_prod(e1_new,e2_new)*e1_new; 
-        e2_new = e2_new / norm_2(e2_new);
-        e3_new = e3_new - inner_prod(e1_new,e3_new)*e1_new - inner_prod(e2_new,e3_new)*e2_new;;
-        e3_new = e3_new / norm_2(e3_new);
-        
-        //cout << norm_2(e1_new) << " " << norm_2(e2_new) << " " << norm_2(e3_new) << endl;
         /*
            cout << "== debug ==" << endl;
            cout << x - _new[0] << endl;
@@ -357,6 +343,17 @@ int reprojection(int id,
            cout << e1_e3 << endl;
            cout << r1_r2 << endl;
            */
+
+
+        float error = inner_prod(e1,e1_new) + inner_prod(e2,e2_new) + inner_prod(e3,e3_new);
+        if(error < 2.8) return 0;
+
+        //Gram-Schmidt orthonormalization
+        e1_new = e1_new / norm_2(e1_new);
+        e2_new = e2_new - inner_prod(e1_new,e2_new)*e1_new; 
+        e2_new = e2_new / norm_2(e2_new);
+        e3_new = e3_new - inner_prod(e1_new,e3_new)*e1_new - inner_prod(e2_new,e3_new)*e2_new;;
+        e3_new = e3_new / norm_2(e3_new);
 
         for(int i = 0; i < dim; i++){
             E(i,0) = e1_new(i);
