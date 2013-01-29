@@ -54,7 +54,7 @@ static lbfgsfloatval_t evaluate(
     f[8] = x[9]*x[12] + x[10]*x[13] + (x[11]-1)*x[14];
     f[9] = (x[1]-1)*x[15] + x[2]*x[16] + x[3]*x[17];
     f[10] = x[5]*x[15] + (x[6]-1)*x[16] + x[7]*x[17];
-    f[11] = x[9]*x[15] + x[10]*x[16] + (x[1]-1)*x[17];
+    f[11] = x[9]*x[15] + x[10]*x[16] + (x[11]-1)*x[17];
     f[12] = norm_r1 - 1;
     f[13] = norm_r2 - 1;
     f[14] = r1_dot_r2 / (norm_r1*norm_r2);
@@ -68,9 +68,9 @@ static lbfgsfloatval_t evaluate(
     }
 
     //Set GradientVector
-    lbfgsfloatval_t d_norm_e1_x0 = x[0] / norm_e1, d_norm_e1_x1 = x[1] / norm_e1, d_norm_e1_x2 = x[2] / norm_e1, _norm_e1_x3 = x[3] / norm_e1;
-    lbfgsfloatval_t d_norm_e2_x4 = x[4] / norm_e2, d_norm_e2_x5 = x[5] / norm_e2, d_norm_e2_x6 = x[6] / norm_e2, _norm_e2_x7 = x[7] / norm_e2;
-    lbfgsfloatval_t d_norm_e3_x8 = x[8] / norm_e3, d_norm_e3_x9 = x[9] / norm_e3, d_norm_e3_x10 = x[10] / norm_e3, _norm_e3_x11 = x[11] / norm_e3;
+    lbfgsfloatval_t d_norm_e1_x0 = x[0] / norm_e1, d_norm_e1_x1 = x[1] / norm_e1, d_norm_e1_x2 = x[2] / norm_e1, d_norm_e1_x3 = x[3] / norm_e1;
+    lbfgsfloatval_t d_norm_e2_x4 = x[4] / norm_e2, d_norm_e2_x5 = x[5] / norm_e2, d_norm_e2_x6 = x[6] / norm_e2, d_norm_e2_x7 = x[7] / norm_e2;
+    lbfgsfloatval_t d_norm_e3_x8 = x[8] / norm_e3, d_norm_e3_x9 = x[9] / norm_e3, d_norm_e3_x10 = x[10] / norm_e3, d_norm_e3_x11 = x[11] / norm_e3;
 
     lbfgsfloatval_t d_norm_r1_x12 = x[12] / norm_r1, d_norm_r1_x13 = x[13] / norm_r1, d_norm_r1_x14 = x[14] / norm_r1;
     lbfgsfloatval_t d_norm_r2_x15 = x[15] / norm_r2, d_norm_r2_x16 = x[16] / norm_r2, d_norm_r2_x17 = x[17] / norm_r2;
@@ -105,9 +105,9 @@ static lbfgsfloatval_t evaluate(
             + f[3]*(x[2]/norm_e2 - e1_dot_e2*d_norm_e2_x6/(norm_e2*norm_e2) )/norm_e1
             + f[5]*(x[10]/norm_e2 - e2_dot_e3*d_norm_e2_x6/(norm_e2*norm_e2) )/norm_e3
             + f[7]*x[13] + f[10]*x[16] + f[16]*_pre[1]);
-    g[7] = 2*(f[2]*d_norm_e3_x7
-            + f[3]*(x[3]/norm_e3 - e1_dot_e3*d_norm_e3_x7/(norm_e3*norm_e3) )/norm_e1
-            + f[5]*(x[11]/norm_e3 - e2_dot_e3*d_norm_e3_x7/(norm_e3*norm_e3) )/norm_e3
+    g[7] = 2*(f[2]*d_norm_e2_x7
+            + f[3]*(x[3]/norm_e2 - e1_dot_e3*d_norm_e2_x7/(norm_e2*norm_e2) )/norm_e1
+            + f[5]*(x[11]/norm_e2 - e2_dot_e3*d_norm_e2_x7/(norm_e2*norm_e2) )/norm_e3
             + f[7]*x[14] + f[10]*x[17] + f[16]*_pre[2]);
 
     g[8] = 2*(f[2]*d_norm_e3_x8
@@ -127,26 +127,21 @@ static lbfgsfloatval_t evaluate(
             + f[5]*(x[7]/norm_e3 - e2_dot_e3*d_norm_e3_x11/(norm_e3*norm_e3) )/norm_e2
             + f[8]*x[14] + f[11]*x[17] + f[17]*_pre[2]);
 
+    g[12] = 2*(f[6]*(x[1]-1) + f[7]*x[5] + f[8]*x[9] + f[12]*d_norm_r1_x12
+            + f[14]*(x[15] / norm_r1 - r1_dot_r2*d_norm_r1_x12 / norm_r1*norm_r1) / norm_r2 );
+    g[13] = 2*(f[6]*x[2] + f[7]*(x[6]-1) + f[8]*x[10] + f[12]*d_norm_r1_x13
+            + f[14]*(x[16] / norm_r1 - r1_dot_r2*d_norm_r1_x13 / norm_r1*norm_r1) / norm_r2 );
+    g[14] = 2*(f[6]*x[3] + f[7]*x[7] + f[8]*(x[11]-1) + f[12]*d_norm_r1_x14
+            + f[14]*(x[17] / norm_r1 - r1_dot_r2*d_norm_r1_x14 / norm_r1*norm_r1) / norm_r2 );
 
-    g[12] = 2*(f[6]*(x[1]-1) + f[7]*x[5]
-            + f[8]*x[9] + f[12]*d_norm_r1_x12
-            + f[14]*(x[15] / norm_r1 - r1_dot_r2*d_norm_r1_x9 / norm_r1*norm_r1) / norm_r2 );
-    g[13] = 2*(f[6]*x[2] + f[7]*(x[6]-1)
-            + f[8]*x[10] + f[12]*d_norm_r1_x13
-            + f[14]*(x[16] / norm_r1 - r1_dot_r2*d_norm_r1_x10 / norm_r1*norm_r1) / norm_r2 );
-    g[14] = 2*(f[6]*x[3] + f[7]*x[7]
-            + f[8]*(x[11]-1) + f[12]*d_norm_r1_x14
-            + f[14]*(x[17] / norm_r1 - r1_dot_r2*d_norm_r1_x11 / norm_r1*norm_r1) / norm_r2 );
+    g[15] = 2*(f[9]*(x[1]-1) + f[10]*x[5] + f[11]*x[9] + f[13]*d_norm_r2_x15
+            + f[14]*(x[12] / norm_r2 - r1_dot_r2*d_norm_r2_x15 / norm_r2*norm_r2) / norm_r1 );
+    g[16] = 2*(f[9]*x[2] + f[10]*(x[6]-1) + f[11]*x[10] + f[13]*d_norm_r2_x16
+            + f[14]*(x[13] / norm_r2 - r1_dot_r2*d_norm_r2_x16 / norm_r2*norm_r2) / norm_r1 );
+    g[17] = 2*(f[9]*x[3] + f[10]*x[7] + f[11]*(x[11]-1) + f[13]*d_norm_r2_x17
+            + f[14]*(x[14] / norm_r2 - r1_dot_r2*d_norm_r2_x17 / norm_r2*norm_r2) / norm_r1 );
 
-    g[15] = 2*(f[9]*(x[1]-1) + f[10]*x[5]
-            + f[11]*x[9] + f[13]*d_norm_r2_x15
-            + f[14]*(x[12] / norm_r2 - r1_dot_r2*d_norm_r2_x12 / norm_r2*norm_r2) / norm_r1 );
-    g[16] = 2*(f[9]*x[2] + f[10]*(x[6]-1)
-            + f[11]*x[10] + f[13]*d_norm_r2_x16
-            + f[14]*(x[13] / norm_r2 - r1_dot_r2*d_norm_r2_x13 / norm_r2*norm_r2) / norm_r1 );
-    g[17] = 2*(f[9]*x[3] + f[10]*x[7]
-            + f[11]*(x[9]-1) + f[13]*d_norm_r2_x17
-            + f[14]*(x[14] / norm_r2 - r1_dot_r2*d_norm_r2_x14 / norm_r2*norm_r2) / norm_r1 );
+
 
     lbfgs_free(f);
     return fx;
