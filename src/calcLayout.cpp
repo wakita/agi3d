@@ -128,13 +128,16 @@ void calcInitLayout(){
             A[i+j*N] = B(i,j);
         }
     }
-    lwork = -1;
+    //get 
+/*    lwork = -1;
     float *work = new float[1];
     ssyev_("V", "U", &N, A, &N, w, work, &lwork, &info);
     lwork = (int)work[0];
     delete[]work;
-
-    work = new float[max((int) 1, lwork)];
+    */
+    
+    float *work = new float[3*N];
+    lwork = 3*N;
     ssyev_("V", "U", &N, A, &N, w, work, &lwork, &info);
 
     //printf("#eigenvalues \n"); printf("w ="); printmat(N, 1, w, 1); printf("\n");
